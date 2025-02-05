@@ -1,0 +1,7 @@
+/__pycache__
+/flask_session
+*.db
+/venv
+/instance
+*/favicon.ico
+*/privacy.html
