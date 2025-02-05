@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+
+    <form action="/deleteaccount" method="post" onsubmit="return validateForm()">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="current" id="current" placeholder="Current Password" type="password">
+            <span id="error-message-current" style="color: red;"></span>
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="confirmation" id="confirmation" placeholder="Enter password again" type="password">
+            <span id="error-message-confirmation" style="color: red;"></span>
+        </div>
+        <button class="btn btn-danger" type="submit">DELETE MY ACCOUNT</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            console.log("validateForm called");
+
+            document.getElementById("error-message-current").textContent = "";
+            document.getElementById("error-message-confirmation").textContent = "";
+
+            const current = document.getElementById("current").value;
+            const confirmation = document.getElementById("confirmation").value;
+            
+            if (current.length > 64) {
+                document.getElementById("error-message-current").textContent = "Enter valid current password";
+                return false;
+            }
+            else if (current == "") {
+                document.getElementById("error-message-current").textContent = "Enter your current password";
+                return false;
+            }
+            if (current !== confirmation) {    
+                document.getElementById("error-message-confirmation").textContent = "Passwords don't match";
+                return false;
+            }
+            console.log("Validation passed");
+            return true;
+        }
+    </script>
+
+{% endblock %}

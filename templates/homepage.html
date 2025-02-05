@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+
+<script src="{{ url_for('static', filename='guest.js') }}"></script>
+
+<div class="container" style="width: 540px; max-width: 100%;"></div>
+
+    <button type="button" id="playbutton" class="btn btn-primary btn-lg btn-xl" onclick="play()">Start playing</button>
+    <p></p>
+    <div class="d-grid gap-2 d-md-block">
+        <button class="btn btn-primary" id="sunday" type="button" onclick="check(0)">Sunday</button>
+        <button class="btn btn-primary" id="monday" type="button" onclick="check(1)">Monday</button>
+        <button class="btn btn-primary" id="tuesday" type="button" onclick="check(2)">Tuesday</button>
+        <button class="btn btn-primary" id="wednesday" type="button" onclick="check(3)">Wednesday</button>
+        <button class="btn btn-primary" id="thursday" type="button" onclick="check(4)">Thursday</button>
+        <button class="btn btn-primary" id="friday" type="button" onclick="check(5)">Friday</button>
+        <button class="btn btn-primary" id="saturday" type="button" onclick="check(6)">Saturday</button>
+    </div>
+    <p></p>
+    <button type="button" id="timer" class="btn btn-warning" onclick="hidetext()">0.000</button>
+</div>
+
+{% endblock %}

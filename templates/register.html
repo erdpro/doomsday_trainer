@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+
+    <form action="/register" method="post" onsubmit="return validateForm()">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" id="username" placeholder="Username" type="text">
+            <span id="error-message-username" style="color: red;"></span>
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="password" id="password" placeholder="Password" type="password">
+            <span id="error-message-password" style="color: red;"></span>
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="confirmation" id="confirmation" placeholder="Enter password again" type="password">
+            <span id="error-message-confirmation" style="color: red;"></span>
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            console.log("validateForm called");
+
+            document.getElementById("error-message-username").textContent = "";
+            document.getElementById("error-message-password").textContent = "";
+            document.getElementById("error-message-confirmation").textContent = "";
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const confirmation = document.getElementById("confirmation").value;
+            
+            if (username.length > 32) {
+                document.getElementById("error-message-username").textContent = "Username must be 32 characters or less.";
+                return false;
+            }
+            else if (password.length > 64) {
+                document.getElementById("error-message-password").textContent = "Password must be maximum 64 characters";
+                return false;
+            }
+            else if (password.length < 8) {
+                document.getElementById("error-message-password").textContent = "Password must be minimum 8 characters";
+                return false;
+            }
+
+            if (password !== confirmation) {
+                document.getElementByID("error-message-confirmation").textContent = "Passwords don't match";
+                return false;
+            }
+            console.log("Validation passed");
+            return true;
+        }
+    </script>
+
+{% endblock %}

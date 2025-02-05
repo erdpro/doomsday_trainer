@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Account page
+{% endblock %}
+
+{% block main %}
+<div class="container" style="width: 540px; max-width: 100%;">
+    <h2>Account page</h2>
+    <table class="table text-start">
+        <tbody class="table-group-divider">
+            <tr>
+                <td>Signup date</td>
+                <td>{{ formatted}}</td>
+            </tr>
+            <tr>
+                <td>Games played (overall)</td>
+                <td>{{ gamesplayed }}</td>
+            </tr>
+            <tr>
+                <td>Correct percentage (overall)</td>
+                <td>{{ (correctpercent * 100) | round(2) }} %</td>
+            </tr>
+            <tr>
+                <td>Average time (overall)</td>
+                <td>{{ (averagetime / 1000) | round(2) }} seconds</td>
+            </tr>
+            <tr>
+                <td>Games played (last 7 days)</td>
+                <td>{{ sevengamesplayed }}</td>
+            </tr>
+            <tr>
+                <td>Correct percentage (last 7 days)</td>
+                <td>{{ (sevencorrectpercent * 100) | round(2) }} %</td>
+            </tr>
+            <tr>
+                <td>Average time (last 7 days)</td>
+                <td>{{ (sevenaveragetime / 1000) | round(2) }} seconds</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Month statistics
+            </button>
+          </h2>
+          <div id="flush-collapseOne" class="accordion-collapse collapse">
+            <div class="accordion-body">
+
+                {% if monthpercent and monthtime and gamesplayed >= 50 %}
+
+                <table class="table text-start">
+                    <tbody class="table-group-divider">
+                        <thead>
+                            <th>Month</th>
+                            <th>Correct %</th>
+                            <th>Average time</th>
+                        </thead>
+
+                            {% set month_min_percent = monthpercent | min %}
+                            {% set month_sorted_percent = monthpercent | sort %}
+                            {% set month_second_min_percent = month_sorted_percent[1] %}
+                            {% set month_max_percent = monthpercent | max %}
+                    
+                            {% set month_min_time = monthtime | min %}
+                            {% set month_sorted_time = monthtime | sort(reverse=true) %}
+                            {% set month_second_max_time = month_sorted_time[1] %}
+                            {% set month_max_time = monthtime | max %}
+
+                            {% for n in range(12) %}
+                            <tr>
+                                <td>{{ monthnames[n] }}</td>    
+                                <td style="
+                                    {% if monthpercent[n] == month_min_percent %}color: red; font-weight:bold;
+                                    {% elif monthpercent[n] == month_second_min_percent %}color: orange; font-weight:bold;
+                                    {% elif monthpercent[n] == month_max_percent %}color: green; font-weight:bold;
+                                    {% else %}color: black;
+                                    {% endif %}">
+                                {{ (monthpercent[n] * 100) | round(0) | int }} %</td>
+                                <td style="
+                                    {% if monthtime[n] == month_min_time %}color: green; font-weight:bold;
+                                    {% elif monthtime[n] == month_second_max_time %}color: orange; font-weight:bold;
+                                    {% elif monthtime[n] == month_max_time %}color: red; font-weight:bold;
+                                    {% else %}color: black;
+                                    {% endif %}">
+                                {{ (monthtime[n] / 1000) | round(2)}} seconds</td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+
+                {% else %}
+                    <p>Play at least 50 games for detailed month statistics.</p>
+                {% endif %}
+            </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+            Century statistics
+          </button>
+        </h2>
+        <div id="flush-collapseTwo" class="accordion-collapse collapse">
+          <div class="accordion-body">
+
+            {% if centurypercent and centurytime and gamesplayed >= 25 %}
+
+            <table class="table text-start">
+                <tbody class="table-group-divider">
+                    <thead>
+                        <th>Century</th>
+                        <th>Correct %</th>
+                        <th>Average time</th>
+                    </thead>
+
+                        {% set century_min_percent = centurypercent | min %}
+                        {% set century_max_percent = centurypercent | max %}
+                
+                        {% set century_min_time = centurytime | min %}
+                        {% set century_max_time = centurytime | max %}
+
+                        {% for n in range(4) %}
+                        <tr>
+                            <td>{{ centurynames[n] }}</td>
+                            <td style="
+                                {% if centurypercent[n] == century_min_percent %}color: red; font-weight:bold;
+                                {% elif centurypercent[n] == century_max_percent %}color: green; font-weight:bold;
+                                {% else %}color: black;
+                                {% endif %}">
+                            {{ (centurypercent[n] * 100) | round(0) | int }} %</td>
+                            <td style="
+                                {% if centurytime[n] == century_min_time %}color: green; font-weight:bold;
+                                {% elif centurytime[n] == century_max_time %}color: red; font-weight:bold;
+                                {% else %}color: black;
+                                {% endif %}">
+                            {{ (centurytime[n] / 1000) | round(2)}} seconds</td>
+                        </tr>
+                        {% endfor %}
+
+                </tbody>
+            </table>
+
+            {% else %}
+                <p>Play at least 25 games for detailed century statistics.</p>
+            {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p></p>
+
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <form action="/download" method="post">
+            <button type="submit" class="btn btn-primary" style="text-align: left;">Download .csv</button>
+        </form>
+        <p></p>
+        <a href="/changepassword">
+            <button type="submit" class="btn btn-primary" style="text-align: left;">Change password</button>
+        </a>
+        <p></p>
+        <a href="/deleteaccount">
+            <button type="submit" class="btn btn-primary" style="text-align: left;">Delete account</button>
+        </a>
+    </div>
+
+</div>
+{% endblock %}

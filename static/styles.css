@@ -1,0 +1,12 @@
+.btn-xl {
+    width: 300px;
+    max-width: 100%;
+    height: 80px;
+    font-size: 1.4rem;
+}
+
+#timer {
+    min-width: 80px; 
+    min-height: 38px;
+    color:white;
+}
